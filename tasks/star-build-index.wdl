@@ -7,23 +7,26 @@ task GenomeGenerate {
 
         Int? sjdbOverhang
         File? reference_gtf
-        String? prefix_output= star-index
+        String? prefix_output= "star-index"
 
         Int threads = 16
         String memory = "32G"
-        Int time_minutes = ceil(size(referenceFasta, "G") * 240 / threads)
+        Int time_minutes = ceil(size(reference_fasta, "G") * 240 / threads)
         String docker_image = "docker.io/polumehcanos/star:2.10.b"
     }
 
     command {
         set -e
+
         mkdir -p ~{genome_dir}
+
         STAR \
         --runMode genomeGenerate \
         --runThreadN ~{threads} \
         --genome_dir ~{genome_dir} \
-        --genomeFastaFiles ~{referenceFasta} \
-        ~{"--sjdbGTFfile " + referenceGtf}
+        --genomeFastaFiles ~{reference_fasta} \
+        ~{"--sjdbGTFfile " + reference_gtf} \
+        ~{if defined(sjdbOverhang) then "--sjdbOverhang ~{sjdbOverhang}" else ""}
 
         cd ~{genome_dir}
         tar -cvzf ../~{prefix_output}.tar.gz .
@@ -56,8 +59,8 @@ task GenomeGenerate {
     runtime {
         cpu: threads
         memory: memory
-        time_minutes: timeMinutes
-        docker: dockerImage
+        time_minutes: time_minutes
+        docker: docker_image
         disks: "local-disk 500 SSD"
     }
 
