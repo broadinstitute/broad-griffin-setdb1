@@ -38,16 +38,14 @@ mv mm10.refGene.gtf ../mm10/genes
 cd ..
 rm -r tmp
 
-
-
 # Download the reeat masker file from UCSC
-# http://hgdownload.cse.ucsc.edu/goldenPath/mm10/database/rmsk.txt.gz
-
-# Download the refseq gene annotations from UCSC and convert them to GTF.
-# http://hgdownload.cse.ucsc.edu/goldenPath/mm10/database/refGene.txt.gz
+#wget http://hgdownload.cse.ucsc.edu/goldenPath/mm10/database/rmsk.txt.gz
+#mv rmsk.txt.gz mm10/repeats/mm10.ucsc.rmsk.txt.gz
 
 
-# Download TEtranscript pre-indexed files
-# https://labshare.cshl.edu/shares/mhammelllab/www-data/TElocal/annotation_tables/mm10_rmsk_TE.gtf.locInd.locations.gz
-# https://labshare.cshl.edu/shares/mhammelllab/www-data/TEtranscripts/TE_GTF/mm10_rmsk_TE.gtf.gz
-# https://labshare.cshl.edu/shares/mhammelllab/www-data/TEtranscripts/prebuilt_indices/mm10_rmsk_TE.gtf.ind.gz
+# Download TEtranscript pre-indexed files. The repeat masker is filtered and contains less entries than the UCSC one. 
+# tRNA are removed and other simple and short entries. Exact details are unclear.
+# Note that the script will remove most simple repetitive sequences and short non-coding RNA (e.g. tRNA)
+ wget https://labshare.cshl.edu/shares/mhammelllab/www-data/TElocal/annotation_tables/mm10_rmsk_TE.gtf.locInd.locations.gz
+ wget https://labshare.cshl.edu/shares/mhammelllab/www-data/TEtranscripts/TE_GTF/mm10_rmsk_TE.gtf.gz
+ wget https://labshare.cshl.edu/shares/mhammelllab/www-data/TEtranscripts/prebuilt_indices/mm10_rmsk_TE.gtf.ind.gz
