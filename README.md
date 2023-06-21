@@ -33,7 +33,7 @@ Using the genome FASTA file insided `mm10/genome` you can build the index for *S
 
 ## Quantifications
 
-`star-repeats-quantification` workflow will align the FASTQs to the genome using *STAR* and compute genes and TEs quantifications. Four count files will be reported:
+`workflow/align-quantify-repeats.wdl` workflow will align the FASTQs to the genome using *STAR* and compute genes and TEs quantifications using *TElocal* and *TEcount*. Four count files will be reported:
  - **family-level-unique-counts**
  - **family-level-multimappers-counts**
  - **loci-level-unique-counts**
