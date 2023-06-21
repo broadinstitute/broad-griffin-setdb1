@@ -8,7 +8,7 @@ workflows:
              - main
          tags:
              - /.*/
-    - name: "Align-quantify-repeats"
+   - name: "Align-quantify-repeats"
      subclass: WDL
      primaryDescriptorPath: /workflows/align-quantify-repeats.wdl
      filters:  # Only develop or master branches and localAligner/** tags
