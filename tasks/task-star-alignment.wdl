@@ -11,8 +11,8 @@ version 1.0
 
 task Star {
     input {
-        File fastq1
-        File? fastq2
+        Array[File] fastq1
+        Array[File]? fastq2
         #File index_tar # For the future. don't think is important now.
         Array[File]+ indexFiles
         String outFileNamePrefix
@@ -56,7 +56,7 @@ task Star {
         set -e
         mkdir -p `dirname ${outFileNamePrefix}`
         STAR \
-        --readFilesIn ${fastq1} ${fastq2} \
+        --readFilesIn ${sep="," fastq1} ${sep=","fastq2} \
         --outFileNamePrefix ${outFileNamePrefix} \
         --genomeDir ${sub(indexFiles[0], basename(indexFiles[0]), "")} \
         --outSAMtype ${outSAMtype} \

@@ -7,8 +7,8 @@ import "../tasks/task-tecount-quantification.wdl" as te_count
 workflow wf {
 	input{
         Array[File]+ indexes
-    	File fastq1
-        File? fastq2
+    	  Array[File] fastq1
+        Array[File]? fastq2
         File gene_gtf
         File te_gtf
         File te_loci_gtf
