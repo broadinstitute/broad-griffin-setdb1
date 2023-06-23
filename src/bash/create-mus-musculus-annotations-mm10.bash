@@ -46,9 +46,11 @@ rm -r tmp
 # Download TEtranscript pre-indexed files. The repeat masker is filtered and contains less entries than the UCSC one. 
 # tRNA are removed and other simple and short entries. Exact details are unclear.
 # Note that the script will remove most simple repetitive sequences and short non-coding RNA (e.g. tRNA)
+# All these files need to be uncompressed using the `gzip -d` command. TElocal does not accept compressed files.
  wget https://labshare.cshl.edu/shares/mhammelllab/www-data/TElocal/annotation_tables/mm10_rmsk_TE.gtf.locInd.locations.gz -O mm10/repeats/mm10_rmsk_TE.gtf.gz
  #mv mm10_rmsk_TE.gtf.locInd.locations.gz ../mm10/repeats
  wget https://labshare.cshl.edu/shares/mhammelllab/www-data/TEtranscripts/TE_GTF/mm10_rmsk_TE.gtf.gz -O mm10/repeats/mm10_rmsk_TE.gtf.gz
  #mv  mm10_rmsk_TE.gtf.gz ../mm10/repeats
  wget https://labshare.cshl.edu/shares/mhammelllab/www-data/TEtranscripts/prebuilt_indices/mm10_rmsk_TE.gtf.ind.gz -O mm10/repeats/mm10_rmsk_TE.gtf.ind.gz
  #mv mm10_rmsk_TE.gtf.ind.gz ../mm10/repeats
+ wget https://labshare.cshl.edu/shares/mhammelllab/www-data/TElocal/prebuilt_indices/mm10_rmsk_TE.gtf.locInd.gz -O mm10/repeats/mm10_rmsk_TE.gtf.locInd.gz

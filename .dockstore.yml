@@ -16,3 +16,11 @@ workflows:
              - main
          tags:
              - /.*/
+   - name: "Align-quantify-repeats-chromatin"
+     subclass: WDL
+     primaryDescriptorPath: /workflows/align-quantify-repeats-chromatin.wdl
+     filters:  # Only develop or master branches and localAligner/** tags
+         branches:
+             - main
+         tags:
+             - /.*/

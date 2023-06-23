@@ -13,7 +13,7 @@ task te_count {
     String docker_image = "docker.io/polumechanos/telocal-count:latest"
   }
   command {
-    TEcount --format BAM --sortByPos --stranded ${stranded} --mode ${mode} -b ${bam} --TE ${gtf_rmsk} --GTF ${gtf_gene} --project ${output_prefix}
+    TEcount -b ${bam} --sortByPos --stranded ${stranded} --mode ${mode} --TE ${gtf_rmsk} --GTF ${gtf_gene} --project ${output_prefix} --format BAM
   }
   output {
     File count_table= output_prefix + ".cntTable"
