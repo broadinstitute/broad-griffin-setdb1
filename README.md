@@ -40,7 +40,8 @@ Using the genome FASTA file insided `mm10/genome` you can build the index for *S
  - **loci-level-multimappers-counts**.
 
 `bowtie2-repeats-quantification` workflow will align the FASTQs to the genome using *bowtie2* and a weighted *bedgraph* accounting for multi-mappers will be generated.
-
+gs://encode-pipeline-genome-data/mm10/bowtie2_index/ENCFF309GLL.tar.gz
+gs://encode-pipeline-genome-data/mm10/mm10_no_alt.chrom.sizes.tsv
 
 TODO:
 - Report unique-mappers track for ChIP

@@ -7,57 +7,35 @@ task smartmap {
         Array[File] fastq1
         Array[File]? fastq2
         #File index_tar # For the future. don't think is important now.
-        Array[File]+ indexFiles
-        String outFileNamePrefix
-        String outSAMtype = "BAM SortedByCoordinate"
-        String readFilesCommand = "zcat"
-        Int outBAMcompression = 1
-        String? twopassMode
-        String outSAMunmapped = "Within KeepPairs"
-      
-        File? sjdbGTFfile
-        Int? sjdbOverhang
-        Int chimSegmentMin= 0
-        Int outFilterMultimapNmax = 100
-        Int winAnchorMultimapNmax = 100
-        String alignEndsType = "EndToEnd"
-        String alignEndsProtrude = "100 DiscordantPair"
-        Float outFilterScoreMinOverLread = 0.4
-        Float outFilterMatchNminOverLread = 0.4
-        String outSAMattributes = "All"
-        String outSAMattrIHstart = "0"
-        #String outSAMstrandField = "intronMotif" # This is a placeholder for the future. Unclear if we need it.
-
+        File genome_index_tar
+        String prefix
 
         Int cpus = 16
         String? memory = "40G"
         # 20 minute initialization + time reading in index (1 minute per G) + time aligning data.
         #Int timeMinutes = 20 + ceil(size(indexFiles, "G")) + ceil(size(flatten([inputR1, inputR2]), "G") * 300 / runThreadN)
-        String docker_image = "docker.io/polumechanos/starmap"
+        String docker_image = "docker.io/polumechanos/smartmap"
     }
 
     # Use a margin of 30% index size. Real memory usage is ~30 GiB for a 27 GiB index. 
-    Int memoryGb = 40
-    # For some reason doing above calculation inside a string does not work.
-    # So we solve it with an optional memory string and using select_first
-    # in the runtime section.
-
-    #TODO: Could be extended for all possible output extensions.
-    Map[String, String] samOutputNames = {"BAM SortedByCoordinate": "sortedByCoord.out.bam"}
+    Int memoryGb = 24
 
     command <<<
         set -e
+
+        tar zxvf ~{genome_index_tar} --no-same-owner -C ./
+        genome_prefix=$(basename $(find . -type f -name "*.rev.1.bt2") .rev.1.bt2)
         # Create a repeats-aware bam file for chromatin data.
-        SmartMapPrep -k 51 -I 100 -L 2000 -p ~{cpus} -x [Bowtie2 index] -o [output prefix] -1 [R1 fastq] -2 [R2 fastq]
+        SmartMapPrep -s ' ' -k 51 -I 100 -L 2000 -p ~{cpus} -x $genome_prefix -o ~{output_prefix} -1 ~{sep="," fastq1} -2 ~{sep="," fastq2}
 
         # Create a repeats-aware bam file for transcriptomic data.
-        SmartMapRNAPrep -k 51 -I 100 -L 2000 -p ~{cpus} -x [Bowtie2 index] -o [output prefix] -1 [R1 fastq] -2 [R2 fastq]
+        #SmartMapRNAPrep -k 51 -I 100 -L 2000 -p ~{cpus} -x [HiSat2 index] -o [output prefix] -1 [R1 fastq] -2 [R2 fastq]
 
         # After prepping we can run SmartMap
         # -c : Flag for continuous output bedgraphs. Default off.
         # -S : Flag for strand-specific mode. Default off.
         # -r : Flag for read output mode with weights. Default off.
-        SmartMap [options] -m 50 -s 0 -i 1 -v 1 -l 1 -g [genome length file] -o [output prefix] [BED or BED.gz file input(s)]
+        SmartMap [options] -m 50 -s 0 -i 1 -v 1 -l 1 -g ~{chrom_sizes} -o ~{output_prefix} ~{output_prefix}.bed
     >>>
 
     output {

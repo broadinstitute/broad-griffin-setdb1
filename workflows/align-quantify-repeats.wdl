@@ -73,7 +73,6 @@ workflow wf {
   	File family_level_counts_multi_mappers= family_multi.count_table
     File loci_level_counts_uniq_mappers= loci_uniq.count_table
   	File loci_level_counts_multi_mappers= loci_multi.count_table
-    
   }
 
 }

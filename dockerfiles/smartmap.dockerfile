@@ -85,8 +85,10 @@ COPY --from=builder --chown=$USER:$USER /software/bowtie2* /software/
 COPY --from=builder --chown=$USER:$USER /software/hisat2* /software/
 COPY --from=builder --chown=$USER:$USER /software/SmartMap* /software/
 COPY --from=builder /usr/lib/x86_64-linux-gnu/perl/5.36 /usr/lib/x86_64-linux-gnu/perl/5.36/
+COPY --from=builder --chown=$USER:$USER /lib/x86_64-linux-gnu/* /lib/x86_64-linux-gnu/
+COPY --from=builder --chown=$USER:$USER /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /usr/lib/x86_64-linux-gnu/libstdc++.so.6
 #COPY --from=builder --chown=$USER:$USER /usr/local/bin/* /usr/local/bin/
-#COPY --from=builder --chown=$USER:$USER /lib/x86_64-linux-gnu/* /lib/x86_64-linux-gnu/
+
 #COPY --chown=$USER:$USER src/bash/monitor_script.sh /usr/local/bin
 
 USER $USER
