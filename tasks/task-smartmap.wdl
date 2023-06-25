@@ -38,7 +38,7 @@ task smartmap {
         # -S : Flag for strand-specific mode. Default off.
         # -r : Flag for read output mode with weights. Default off.
         echo '------ START: SmartMap------' 1>&2
-        time SmartMap [options] -m 50 -s 0 -i 1 -v 1 -l 1 -g ~{chrom_sizes} -o ~{prefix} ~{prefix}.bed
+        time SmartMap -m 50 -s 0 -i 1 -v 1 -l 1 -g ~{chrom_sizes} -o ~{prefix} ~{prefix}.bed
         
         ls
 
