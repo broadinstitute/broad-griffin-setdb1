@@ -27,7 +27,8 @@ task smartmap {
         tar zxvf ~{genome_index_tar} --no-same-owner -C ./
         genome_prefix=$(basename $(find . -type f -name "*.rev.1.bt2") .rev.1.bt2)
         # Create a repeats-aware bam file for chromatin data.
-        SmartMapPrep -s ' ' -k 51 -I 100 -L 2000 -p ~{cpus} -x $genome_prefix -o ~{prefix} -1 ~{sep="," fastq1} -2 ~{sep="," fastq2}
+        echo '------ START: SmartMapPrep------' 1>&2
+        time SmartMapPrep -s ' ' -k 51 -I 100 -L 2000 -p ~{cpus} -x $genome_prefix -o ~{prefix} -1 ~{sep="," fastq1} -2 ~{sep="," fastq2}
 
         # Create a repeats-aware bam file for transcriptomic data.
         #SmartMapRNAPrep -k 51 -I 100 -L 2000 -p ~{cpus} -x [HiSat2 index] -o [output prefix] -1 [R1 fastq] -2 [R2 fastq]
@@ -36,11 +37,16 @@ task smartmap {
         # -c : Flag for continuous output bedgraphs. Default off.
         # -S : Flag for strand-specific mode. Default off.
         # -r : Flag for read output mode with weights. Default off.
-        #SmartMap [options] -m 50 -s 0 -i 1 -v 1 -l 1 -g ~{chrom_sizes} -o ~{prefix} ~{prefix}.bed
+        echo '------ START: SmartMap------' 1>&2
+        time SmartMap [options] -m 50 -s 0 -i 1 -v 1 -l 1 -g ~{chrom_sizes} -o ~{prefix} ~{prefix}.bed
+        
+        ls
+
     >>>
 
     output {
         Array[File] te_aware_bed = glob("*.bed*")
+        Array[File]? te_aware_bed = glob("*.bedgraph*")
     }
 
     runtime {
