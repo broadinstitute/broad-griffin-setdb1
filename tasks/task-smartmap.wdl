@@ -35,12 +35,11 @@ task smartmap {
         # -c : Flag for continuous output bedgraphs. Default off.
         # -S : Flag for strand-specific mode. Default off.
         # -r : Flag for read output mode with weights. Default off.
-        SmartMap [options] -m 50 -s 0 -i 1 -v 1 -l 1 -g ~{chrom_sizes} -o ~{output_prefix} ~{output_prefix}.bed
+        #SmartMap [options] -m 50 -s 0 -i 1 -v 1 -l 1 -g ~{chrom_sizes} -o ~{output_prefix} ~{output_prefix}.bed
     >>>
 
     output {
-        File bamFile = outFileNamePrefix + "Aligned." +  samOutputNames[outSAMtype]
-        File logFinalOut = outFileNamePrefix + "Log.final.out"
+        Aray[File bed] = glob("*.bed*")
     }
 
     runtime {
