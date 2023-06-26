@@ -43,6 +43,8 @@ Using the genome FASTA file insided `mm10/genome` you can build the index for *S
 gs://encode-pipeline-genome-data/mm10/bowtie2_index/ENCFF309GLL.tar.gz
 gs://encode-pipeline-genome-data/mm10/mm10_no_alt.chrom.sizes.tsv
 
+smartmapprep outputp is a bed.gz file that ends with ("coord_scores.bed.gz") and a folder called splits.
+
 TODO:
 - Report unique-mappers track for ChIP
 - Create tracks for RNA using unique-mappers and apportioning multi-mappers. It will not be the same counts as in the count files but it will give us an idea.
