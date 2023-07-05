@@ -28,7 +28,7 @@ task smartmap {
         genome_prefix=$(basename $(find . -type f -name "*.rev.1.bt2") .rev.1.bt2)
         # Create a repeats-aware bam file for chromatin data.
         echo '------ START: SmartMapPrep------' 1>&2
-        time SmartMapPrep -s ' ' -k 51 -I 100 -L 2000 -p ~{cpus} -x $genome_prefix -o ~{prefix} -1 ~{sep="," fastq1} -2 ~{sep="," fastq2}
+        time SmartMapPrep -s ' ' -k 51 -I 100 -L 2000 -p ~{cpus} -x $genome_prefix -o ~{prefix}_prep -1 ~{sep="," fastq1} -2 ~{sep="," fastq2}
 
         # Create a repeats-aware bam file for transcriptomic data.
         #SmartMapRNAPrep -k 51 -I 100 -L 2000 -p ~{cpus} -x [HiSat2 index] -o [output prefix] -1 [R1 fastq] -2 [R2 fastq]
@@ -38,7 +38,12 @@ task smartmap {
         # -S : Flag for strand-specific mode. Default off.
         # -r : Flag for read output mode with weights. Default off.
         echo '------ START: SmartMap------' 1>&2
-        time SmartMap -m 50 -s 0 -i 1 -v 1 -l 1 -g ~{chrom_sizes} -o ~{prefix} ~{prefix}.bed
+        time SmartMap -m 50 -s 0 -i 1 -v 1 -l 1 -g ~{chrom_sizes} -o ~{prefix}_final ~{prefix}_prep_vf_k51_I100_X2000_filt-flag_filt-coord_scores.bed.gz
+
+        #time SmartMap -i 10 -v 10 -m 50 -s 0 -i 1 -v 1 -l 1 -g ~{chrom_sizes} -o ~{prefix}_prep_vf_k51_I100_X2000_filt-flag_filt-coord_scores.bed.gz ~{prefix}_final.bed
+
+        #echo '------ START: SmartMap continous------' 1>&2
+        #time SmartMap -m 50 -c -s 0 -i 1 -v 1 -l 1 -g ~{chrom_sizes} -o ~{prefix}_prep_vf_k51_I100_X2000_filt-flag_filt-coord_scores.bed.gz ~{prefix}_final_continous.bed
         
         ls
 
