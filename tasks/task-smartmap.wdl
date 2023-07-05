@@ -39,7 +39,6 @@ task smartmap {
         # -r : Flag for read output mode with weights. Default off.
         echo '------ START: SmartMap------' 1>&2
         time SmartMap -m 50 -s 0 -i 1 -v 1 -l 1 -g ~{chrom_sizes} -o ~{prefix}_final ~{prefix}_prep_vf_k51_I100_X2000_filt-flag_filt-coord_scores.bed.gz
-
         #time SmartMap -i 10 -v 10 -m 50 -s 0 -i 1 -v 1 -l 1 -g ~{chrom_sizes} -o ~{prefix}_prep_vf_k51_I100_X2000_filt-flag_filt-coord_scores.bed.gz ~{prefix}_final.bed
 
         #echo '------ START: SmartMap continous------' 1>&2
@@ -50,8 +49,8 @@ task smartmap {
     >>>
 
     output {
-        Array[File] te_aware_bed = glob("*.bed*")
-        Array[File]? te_aware_bed = glob("*.bedgraph*")
+        File smartmap_chromatin_prep = glob("*.bed.gz")[1]
+        File smartmap_bedgraph = glob("*.bedgraph.gz")[1]
     }
 
     runtime {
