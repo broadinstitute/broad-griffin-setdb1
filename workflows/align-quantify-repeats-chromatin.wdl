@@ -6,8 +6,8 @@ workflow wf {
     call smartmap.smartmap
 
     output{
-        File smartmap_chromatin_prep = smartmap.smartmap.smartmap_chromatin_prep
-        File smartmap_bedgraph = smartmap.smartmap.smartmap_bedgrap
+        File smartmap_chromatin_prep = smartmap.smartmap_chromatin_prep
+        File smartmap_bedgraph = smartmap.smartmap_bedgrap
     }
 
 }
