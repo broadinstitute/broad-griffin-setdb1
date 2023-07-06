@@ -49,8 +49,8 @@ task smartmap {
     >>>
 
     output {
-        File smartmap_chromatin_prep = glob("*.bed.gz")[1]
-        File smartmap_bedgraph = glob("*.bedgraph.gz")[1]
+        File smartmap_chromatin_prep = glob("*.bed.gz")[0]
+        File smartmap_bedgraph = "~{prefix}_final.bedgraph.gz"
     }
 
     runtime {
