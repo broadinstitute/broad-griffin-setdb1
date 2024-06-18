@@ -30,22 +30,23 @@ workflow wf {
              twopassMode= twopassMode
     }
 
-    call te_local.te_local as  loci_uniq{
+    call te_local.te_local as loci_uniq{
       input: bam= Star.bamFile,
              stranded= stranded,
              mode= "uniq",
              gtf_rmsk= te_loci_gtf,
              gtf_gene= gene_gtf,
-             output_prefix= "${prefix}.loci_level.uniq_multi",
+             output_prefix= "${prefix}.loci_level.uniq_only"
+             
     }
 
-    call te_local.te_local as  loci_multi{
+    call te_local.te_local as loci_multi{
       input: bam= Star.bamFile,
              stranded= stranded,
              mode= "multi",
              gtf_rmsk= te_loci_gtf,
              gtf_gene= gene_gtf,
-             output_prefix= "${prefix}.loci_level.uniq_only",
+             output_prefix= "${prefix}.loci_level.uniq_multi"
     }
     
     call te_count.te_count as family_uniq {
