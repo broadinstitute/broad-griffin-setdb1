@@ -15,14 +15,14 @@ task te_count {
   command<<<
     if [[ '~{gtf_rmsk}' == *.gz ]]; then
       echo '------ Decompressing the repeats GTF ------' 1>&2
-      gunzip -c ~{gtf_rmsk} > repeats.gtf
+      gzip -dc ~{gtf_rmsk} > repeats.gtf
     else
       echo '------ No decompression needed for the repeats GTF ------' 1>&2
       cat ~{gtf_rmsk} > repeats.gtf
     fi
     if [[ '~{gtf_gene}' == *.gz ]]; then
       echo '------ Decompressing the genes GTF ------' 1>&2
-      gunzip -c ~{gtf_gene} > genes.gtf
+      gzip -dc ~{gtf_gene} > genes.gtf
     else
       echo '------ No decompression needed for the genes GTF ------' 1>&2
       cat ~{gtf_gene} > genes.gtf

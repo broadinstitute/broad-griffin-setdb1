@@ -11,7 +11,7 @@ workflow wf {
     Array[File]? fastq2
     File gene_gtf
     File te_gtf
-    File te_loci_gtf
+    File te_locIndex
     File sjdbGTFfile
     Int sjdbOverhang
     String twopassMode = "Basic"
@@ -35,7 +35,7 @@ workflow wf {
       bam=align.bamFile,
       stranded=stranded,
       mode="uniq",
-      gtf_rmsk=te_loci_gtf,
+      gtf_rmsk=te_locIndex,
       gtf_gene=gene_gtf,
       output_prefix="${prefix}.loci_level.uniq_only"
             
@@ -46,7 +46,7 @@ workflow wf {
       bam=align.bamFile,
       stranded=stranded,
       mode="multi",
-      gtf_rmsk=te_loci_gtf,
+      gtf_rmsk=te_locIndex,
       gtf_gene=gene_gtf,
       output_prefix="${prefix}.loci_level.uniq_multi"
   }

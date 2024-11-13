@@ -21,7 +21,7 @@ task GenomeGenerate {
 
         if [[ '~{reference_fasta}' == *.gz ]]; then
             echo '------ Decompressing the genome ------' 1>&2
-            gunzip -c ~{reference_fasta} > genome.fa
+            gzip -dc ~{reference_fasta} > genome.fa
         else
             echo '------ No decompression needed for the genome ------' 1>&2
             cat ~{reference_fasta} > genome.fa
@@ -29,7 +29,7 @@ task GenomeGenerate {
 
         if [[ '~{reference_gtf}' == *.gz ]]; then
             echo '------ Decompressing the GTF ------' 1>&2
-            gunzip -c ~{reference_gtf} > genes.gtf
+            gzip -dc ~{reference_gtf} > genes.gtf
         else
             echo '------ No decompression needed for the GTF ------' 1>&2
             cat ~{reference_gtf} > genes.gtf

@@ -55,13 +55,14 @@ task star_align {
 
         if [[ '${sjdbGTFfile}' == *.gz ]]; then
             echo '------ Decompressing the GTF ------' 1>&2
-            gunzip -c ${sjdbGTFfile} > genes.gtf
+            gzip -dc ${sjdbGTFfile} > genes.gtf
         else
             echo '------ No decompression needed for the GTF ------' 1>&2
             cat ${sjdbGTFfile} > genes.gtf
         fi
 
-        mkdir -p `dirname ${outFileNamePrefix}`
+        mkdir -p $(dirname ${outFileNamePrefix})
+
         STAR \
         --readFilesIn ${sep="," fastq1} ${sep=","fastq2} \
         --outFileNamePrefix ${outFileNamePrefix} \
