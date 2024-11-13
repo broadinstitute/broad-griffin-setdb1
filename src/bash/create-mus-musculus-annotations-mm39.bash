@@ -34,4 +34,4 @@ md5sum-lite mm39/genome/mm39.chrom.sizes > mm39/genome/mm39.chrom.sizes.md5
 md5sum-lite mm39/genes/gencode.vM36.mm39.p6.chr_patch_hapl_scaff.annotation.gtf.gz > mm39/genes/gencode.vM36.mm39.p6.chr_patch_hapl_scaff.annotation.gtf.gz.md5
 md5sum-lite mm39/repeats/mm39_rmsk_TE.gtf.gz > mm39/repeats/mm39_rmsk_TE.gtf.gz.md5
 md5sum-lite mm39/repeats/mm39_rmsk_TE.gtf.locInd.locations.gz > mm39/repeats/mm39_rmsk_TE.gtf.locInd.locations.gz.md5
-md5sum-lite mm39/repeats/mm39_rmsk_TE.gtf.locInd.gz > mm39/repeats/mm39_rmsk_TE.gtf.locInd.md5
+md5sum-lite mm39/repeats/mm39_rmsk_TE.gtf.locInd.gz > mm39/repeats/mm39_rmsk_TE.gtf.locInd.gz.md5
