@@ -13,7 +13,22 @@ task te_count {
     String docker_image = "docker.io/polumechanos/telocal-count:latest"
   }
   command<<<
-    TEcount -b ~{bam} --sortByPos --stranded ~{stranded} --mode ~{mode} --TE ~{gtf_rmsk} --GTF ~{gtf_gene} --project ~{output_prefix} --format BAM
+    if [[ '~{gtf_rmsk}' == *.gz ]]; then
+      echo '------ Decompressing the repeats GTF ------' 1>&2
+      gunzip -c ~{gtf_rmsk} > repeats.gtf
+    else
+      echo '------ No decompression needed for the repeats GTF ------' 1>&2
+      cat ~{gtf_rmsk} > repeats.gtf
+    fi
+    if [[ '~{gtf_gene}' == *.gz ]]; then
+      echo '------ Decompressing the genes GTF ------' 1>&2
+      gunzip -c ~{gtf_gene} > genes.gtf
+    else
+      echo '------ No decompression needed for the genes GTF ------' 1>&2
+      cat ~{gtf_gene} > genes.gtf
+    fi
+    
+    TEcount -b ~{bam} --sortByPos --stranded ~{stranded} --mode ~{mode} --TE repeats.gtf --GTF genes.gtf --project ~{output_prefix} --format BAM
   >>>
   output {
     File count_table= output_prefix + ".cntTable"

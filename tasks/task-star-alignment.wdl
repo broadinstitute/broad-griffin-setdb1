@@ -53,6 +53,14 @@ task star_align {
 
         tar -xvzf ${genome_index_tar} --no-same-owner -C ./
 
+        if [[ '${sjdbGTFfile}' == *.gz ]]; then
+            echo '------ Decompressing the GTF ------' 1>&2
+            gunzip -c ${sjdbGTFfile} > genes.gtf
+        else
+            echo '------ No decompression needed for the GTF ------' 1>&2
+            cat ${sjdbGTFfile} > genes.gtf
+        fi
+
         mkdir -p `dirname ${outFileNamePrefix}`
         STAR \
         --readFilesIn ${sep="," fastq1} ${sep=","fastq2} \
@@ -66,7 +74,7 @@ task star_align {
         ${"--outSAMunmapped " + outSAMunmapped} \
         ${"--runThreadN " + cpus} \
         ${"--twopassMode " + twopassMode} \
-        ${"--sjdbGTFfile " + sjdbGTFfile} \
+        ${if defined(sjdbGTFfile) then "--sjdbGTFfile genes.gtf" else ""} \
         ${"--sjdbOverhang " + sjdbOverhang} \
         ${"--chimSegmentMin " + chimSegmentMin} \
         ${"--outFilterMultimapNmax " + outFilterMultimapNmax} \

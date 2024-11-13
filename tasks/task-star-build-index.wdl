@@ -10,8 +10,7 @@ task GenomeGenerate {
         String prefix_output="star-index"
 
         Int threads = 16
-        String memory = "32G"
-        Int time_minutes = ceil(size(reference_fasta, "G") * 240 / threads)
+        Int memory = 32
         String docker_image = "docker.io/polumechanos/star:2.10.b"
     }
 
@@ -20,14 +19,31 @@ task GenomeGenerate {
 
         mkdir -p temp_index
 
+        if [[ '~{reference_fasta}' == *.gz ]]; then
+            echo '------ Decompressing the genome ------' 1>&2
+            gunzip -c ~{reference_fasta} > genome.fa
+        else
+            echo '------ No decompression needed for the genome ------' 1>&2
+            cat ~{reference_fasta} > genome.fa
+        fi
+
+        if [[ '~{reference_gtf}' == *.gz ]]; then
+            echo '------ Decompressing the GTF ------' 1>&2
+            gunzip -c ~{reference_gtf} > genes.gtf
+        else
+            echo '------ No decompression needed for the GTF ------' 1>&2
+            cat ~{reference_gtf} > genes.gtf
+        fi
+
+
         overhang=$(bc <<< "~{read_length}-1")
 
         STAR \
         --runMode genomeGenerate \
         --runThreadN ~{threads} \
         --genomeDir temp_index \
-        --genomeFastaFiles ~{reference_fasta} \
-        --sjdbGTFfile ~{reference_gtf} \
+        --genomeFastaFiles genome.fa \
+        --sjdbGTFfile genes.gtf \
         --sjdbOverhang "$overhang"
 
         cd temp_index
@@ -39,10 +55,9 @@ task GenomeGenerate {
     }
 
     runtime {
-        cpu: threads
-        memory: memory
-        time_minutes: time_minutes
-        docker: docker_image
+        cpu: "~{threads}"
+        memory: "~{memory}G"
+        docker: "~{docker_image}"
         disks: "local-disk 500 SSD"
     }
 
