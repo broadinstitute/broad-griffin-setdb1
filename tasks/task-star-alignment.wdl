@@ -51,6 +51,8 @@ task star_align {
     command {
         set -e
 
+        mkdir star_index
+
         tar -xvzf ${genome_index_tar} --no-same-owner -C star_index
 
         if [[ '${genes_gtf}' == *.gz ]]; then
