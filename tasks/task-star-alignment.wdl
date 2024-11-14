@@ -51,10 +51,7 @@ task star_align {
     command {
         set -e
 
-        # Create a temporary directory for extraction
-        temp_dir=$(mktemp -d)
-
-        tar -xvzf ${genome_index_tar} --no-same-owner -C "$temp_dir"
+        tar -xvzf ${genome_index_tar} --no-same-owner -C star_index
 
         if [[ '${genes_gtf}' == *.gz ]]; then
             echo '------ Decompressing the GTF ------' 1>&2
@@ -69,7 +66,7 @@ task star_align {
         STAR \
         --readFilesIn ${sep="," fastq1} ${sep=","fastq2} \
         --outFileNamePrefix ${outFileNamePrefix} \
-        --genomeDir "$temp_dir" \
+        --genomeDir star_index \
         --outSAMtype ${outSAMtype} \
         --outBAMcompression ${outBAMcompression} \
         ${"--readFilesCommand " + readFilesCommand} \
