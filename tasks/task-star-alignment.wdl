@@ -48,49 +48,67 @@ task star_align {
     #TODO: Could be extended for all possible output extensions.
     Map[String, String] samOutputNames = {"BAM SortedByCoordinate": "sortedByCoord.out.bam"}
 
-    command {
+    command <<<
         set -e
 
         mkdir star_index
 
-        tar -xvzf ${genome_index_tar} --no-same-owner -C star_index
+        tar -xvzf ~{genome_index_tar} --no-same-owner -C star_index
 
-        if [[ '${genes_gtf}' == *.gz ]]; then
+        if [[ '~{genes_gtf}' == *.gz ]]; then
             echo '------ Decompressing the GTF ------' 1>&2
             gzip -dc ${genes_gtf} > genes.gtf
         else
             echo '------ No decompression needed for the GTF ------' 1>&2
-            cat ${genes_gtf} > genes.gtf
+            cat ~{genes_gtf} > genes.gtf
         fi
 
-        mkdir -p $(dirname ${outFileNamePrefix})
+        mkdir -p $(dirname ~{outFileNamePrefix})
 
         STAR \
-        --readFilesIn ${sep="," fastq1} ${sep=","fastq2} \
-        --outFileNamePrefix ${outFileNamePrefix} \
+        --readFilesIn ~{sep="," fastq1} ~{sep=","fastq2} \
+        --outFileNamePrefix ~{outFileNamePrefix} \
         --genomeDir star_index \
-        --outSAMtype ${outSAMtype} \
-        --outBAMcompression ${outBAMcompression} \
-        ${"--readFilesCommand " + readFilesCommand} \
-        ${"--outFilterScoreMinOverLread " + outFilterScoreMinOverLread} \
-        ${"--outFilterMatchNminOverLread " + outFilterMatchNminOverLread} \
-        ${"--outSAMunmapped " + outSAMunmapped} \
-        ${"--runThreadN " + cpus} \
-        ${"--twopassMode " + twopassMode} \
-        ${if defined(genes_gtf) then "--sjdbGTFfile genes.gtf" else ""} \
-        ${"--sjdbOverhang " + sjdbOverhang} \
-        ${"--chimSegmentMin " + chimSegmentMin} \
-        ${"--outFilterMultimapNmax " + outFilterMultimapNmax} \
-        ${"--winAnchorMultimapNmax " + winAnchorMultimapNmax} \
-        ${"--alignEndsType " + alignEndsType} \
-        ${"--alignEndsProtrude " + alignEndsProtrude} \
-        ${"--outSAMattributes " + outSAMattributes} \
-        ${"--outSAMattrIHstart " + outSAMattrIHstart}
-    }
+        --outSAMtype ~{outSAMtype} \
+        --outBAMcompression ~{outBAMcompression} \
+        ~{"--readFilesCommand " + readFilesCommand} \
+        ~{"--outFilterScoreMinOverLread " + outFilterScoreMinOverLread} \
+        ~{"--outFilterMatchNminOverLread " + outFilterMatchNminOverLread} \
+        ~{"--outSAMunmapped " + outSAMunmapped} \
+        ~{"--runThreadN " + cpus} \
+        ~{"--twopassMode " + twopassMode} \
+        ~{if defined(genes_gtf) then "--sjdbGTFfile genes.gtf" else ""} \
+        ~{"--sjdbOverhang " + sjdbOverhang} \
+        ~{"--chimSegmentMin " + chimSegmentMin} \
+        ~{"--outFilterMultimapNmax " + outFilterMultimapNmax} \
+        ~{"--winAnchorMultimapNmax " + winAnchorMultimapNmax} \
+        ~{"--alignEndsType " + alignEndsType} \
+        ~{"--alignEndsProtrude " + alignEndsProtrude} \
+        ~{"--outSAMattributes " + outSAMattributes} \
+        ~{"--outSAMattrIHstart " + outSAMattrIHstart}
+
+
+        input_reads=$(awk -F "|" '$1~/input reads/{print $2}' "~{outFileNamePrefix}Log.final.out" | tr -d "\t")
+        aligned_uniquely=$(awk -F "|" '$1~/Uniquely mapped reads number/{print $2}' "~{outFileNamePrefix}Log.final.out" | tr -d "\t")
+        aligned_multimap=$(awk -F "|" '$1~/Number of reads mapped to multiple loci/{print $2}' "~{outFileNamePrefix}Log.final.out" | tr -d "\t")
+        aligned_reads=$((aligned_uniquely + aligned_multimap))
+        unaligned_reads=$((input_reads - aligned_reads))
+
+        echo "$input_reads" > input_reads.txt
+        echo "$aligned_uniquely" > aligned_uniquely.txt
+        echo "$aligned_multimap" > aligned_multimap.txt
+        echo "$aligned_reads" > aligned_reads.txt
+        echo "$unaligned_reads" > unaligned_reads.txt
+    >>>
 
     output {
         File bamFile = outFileNamePrefix + "Aligned." +  samOutputNames[outSAMtype]
         File logFinalOut = outFileNamePrefix + "Log.final.out"
+        Int rna_input_reads = read_int("input_reads.txt")
+        Int rna_aligned_reads = read_int("aligned_reads.txt")
+        Int rna_aligned_uniquely = read_int("aligned_uniquely.txt")
+        Int rna_aligned_multimap = read_int("aligned_multimap.txt")
+        Int rna_unaligned_reads = read_int("unaligned_reads.txt")
     }
 
     runtime {
