@@ -98,18 +98,3 @@ task generate_tracks{
         docker_image: "The docker image to use for the task"
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
