@@ -23,7 +23,7 @@ workflow wf {
       fastq1=fastq1,
       fastq2=fastq2,
       genome_index_tar=genome_index_tar,
-      outFileNamePrefix=prefix,
+      outFileNamePrefix="${prefix}.",
       genes_gtf=genes_gtf,
       sjdbOverhang=sjdbOverhang,
       twopassMode= twopassMode
@@ -34,7 +34,7 @@ workflow wf {
       bam=align.bamFile,
       stranded=stranded,
       mode="uniq",
-      gtf_rmsk=te_locIndex,
+      te_locIndex=te_locIndex,
       gtf_gene=genes_gtf,
       output_prefix="${prefix}.loci_level.uniq_only"
             
@@ -45,7 +45,7 @@ workflow wf {
       bam=align.bamFile,
       stranded=stranded,
       mode="multi",
-      gtf_rmsk=te_locIndex,
+      te_locIndex=te_locIndex,
       gtf_gene=genes_gtf,
       output_prefix="${prefix}.loci_level.uniq_multi"
   }
