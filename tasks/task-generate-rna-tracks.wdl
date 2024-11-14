@@ -75,7 +75,7 @@ task generate_tracks{
         bedGraphToBigWig ~{output_prefix}_cpm.bedgraph ~{chromosome_sizes_file} ~{output_prefix}_cpm.bw
 
         #  RNA bigwig for unique reads
-        samtools view -h -q 30 bedtools ~{bam} | genomecov -ibam - -bg -split -scale $scale_factor > ~{output_prefix}_unique_cpm.bedgraph
+        samtools view -h -q 30 ~{bam} | bedtools genomecov -ibam - -bg -split -scale $scale_factor > ~{output_prefix}_unique_cpm.bedgraph
         bedGraphToBigWig ~{output_prefix}_unique_cpm.bedgraph ~{chromosome_sizes_file} ~{output_prefix}_unique_cpm.bw
     >>>
 
