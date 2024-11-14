@@ -35,8 +35,7 @@ task GenomeGenerate {
             cat ~{reference_gtf} > genes.gtf
         fi
 
-
-        overhang=$(bc <<< "~{read_length}-1")
+        overhang=$(echo "~{read_length}" | awk '{print $1-1}')
 
         STAR \
         --runMode genomeGenerate \
@@ -44,7 +43,7 @@ task GenomeGenerate {
         --genomeDir temp_index \
         --genomeFastaFiles genome.fa \
         --sjdbGTFfile genes.gtf \
-        --sjdbOverhang "$overhang"
+        --sjdbOverhang $overhang
 
         cd temp_index
         tar -cvzf ../~{prefix_output}.tar.gz .
