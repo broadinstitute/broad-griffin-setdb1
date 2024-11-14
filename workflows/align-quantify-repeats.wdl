@@ -95,6 +95,7 @@ workflow wf {
     File rna_fwd_strand_bw_track=tracks.fwd_bw
     File rna_rev_strand_bw_track=tracks.rev_bw
     File rna_bw_tracks=tracks.bw
+    File rna_unique_bw_tracks=tracks.unique_bw
   }
 
 }
