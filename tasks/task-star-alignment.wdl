@@ -22,7 +22,7 @@ task star_align {
         String twopassMode = "Basic"
         String outSAMunmapped = "Within KeepPairs"
       
-        File? sjdbGTFfile
+        File? genes_gtf
         Int? sjdbOverhang
         Int chimSegmentMin= 0
         Int outFilterMultimapNmax = 100
@@ -51,14 +51,17 @@ task star_align {
     command {
         set -e
 
-        tar -xvzf ${genome_index_tar} --no-same-owner -C ./
+        # Create a temporary directory for extraction
+        temp_dir=$(mktemp -d)
 
-        if [[ '${sjdbGTFfile}' == *.gz ]]; then
+        tar -xvzf ${genome_index_tar} --no-same-owner -C "$temp_dir"
+
+        if [[ '${genes_gtf}' == *.gz ]]; then
             echo '------ Decompressing the GTF ------' 1>&2
-            gzip -dc ${sjdbGTFfile} > genes.gtf
+            gzip -dc ${genes_gtf} > genes.gtf
         else
             echo '------ No decompression needed for the GTF ------' 1>&2
-            cat ${sjdbGTFfile} > genes.gtf
+            cat ${genes_gtf} > genes.gtf
         fi
 
         mkdir -p $(dirname ${outFileNamePrefix})
@@ -66,7 +69,7 @@ task star_align {
         STAR \
         --readFilesIn ${sep="," fastq1} ${sep=","fastq2} \
         --outFileNamePrefix ${outFileNamePrefix} \
-        --genomeDir ./ \
+        --genomeDir "$temp_dir" \
         --outSAMtype ${outSAMtype} \
         --outBAMcompression ${outBAMcompression} \
         ${"--readFilesCommand " + readFilesCommand} \
@@ -75,7 +78,7 @@ task star_align {
         ${"--outSAMunmapped " + outSAMunmapped} \
         ${"--runThreadN " + cpus} \
         ${"--twopassMode " + twopassMode} \
-        ${if defined(sjdbGTFfile) then "--sjdbGTFfile genes.gtf" else ""} \
+        ${if defined(genes_gtf) then "--sjdbGTFfile genes.gtf" else ""} \
         ${"--sjdbOverhang " + sjdbOverhang} \
         ${"--chimSegmentMin " + chimSegmentMin} \
         ${"--outFilterMultimapNmax " + outFilterMultimapNmax} \
