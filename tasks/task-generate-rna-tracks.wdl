@@ -45,7 +45,7 @@ task generate_tracks{
         bedGraphToBigWig ~{output_prefix}_cpm_fwd.bedgraph ~{chromosome_sizes_file} ~{output_prefix}_cpm_fwd.bw
 
         # remove the temporary files
-        rm a.fwd*.bam ~{output_prefix}_fwd.bedgraph
+        rm a.fwd*.bam ~{output_prefix}_cpm_fwd.bedgraph
         
         # To get the file for transcripts that originated from the reverse strand:
 
@@ -68,7 +68,7 @@ task generate_tracks{
         bedGraphToBigWig ~{output_prefix}_cpm_rev.bedgraph ~{chromosome_sizes_file} ~{output_prefix}_cpm_rev.bw
 
         # remove temporary files
-        rm a.rev*.bam
+        rm a.rev*.bam ~{output_prefix}_cpm_rev.bedgraph
 
         #  RNA bigwig
         bedtools genomecov -g ~{chromosome_sizes_file} -ibam ~{bam} -bg -scale $scale_factor_merged > ~{output_prefix}_cpm.bedgraph
