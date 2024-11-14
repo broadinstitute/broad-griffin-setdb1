@@ -41,7 +41,7 @@ task generate_tracks{
         samtools index ~{output_prefix}_fwd.bam
 
         # run bedtools genomecov
-        bedtools genomecov -ibam ~{output_prefix}_fwd.bam -bg -scale $scale_factor > ~{output_prefix}_cpm_fwd.bedgraph
+        bedtools genomecov -ibam ~{output_prefix}_fwd.bam -bg -split -scale $scale_factor > ~{output_prefix}_cpm_fwd.bedgraph
         bedGraphToBigWig ~{output_prefix}_cpm_fwd.bedgraph ~{chromosome_sizes_file} ~{output_prefix}_cpm_fwd.bw
 
         # remove the temporary files
@@ -64,18 +64,18 @@ task generate_tracks{
         samtools index ~{output_prefix}_rev.bam
 
         # run bedtools genomecov
-        bedtools genomecov -ibam ~{output_prefix}_rev.bam -bg -scale $scale_factor_rev > ~{output_prefix}_cpm_rev.bedgraph
+        bedtools genomecov -ibam ~{output_prefix}_rev.bam -bg -split -scale $scale_factor_rev > ~{output_prefix}_cpm_rev.bedgraph
         bedGraphToBigWig ~{output_prefix}_cpm_rev.bedgraph ~{chromosome_sizes_file} ~{output_prefix}_cpm_rev.bw
 
         # remove temporary files
         rm a.rev*.bam ~{output_prefix}_cpm_rev.bedgraph
 
         #  RNA bigwig
-        bedtools genomecov -ibam ~{bam} -bg -scale $scale_factor > ~{output_prefix}_cpm.bedgraph
+        bedtools genomecov -ibam ~{bam} -bg -split -scale $scale_factor > ~{output_prefix}_cpm.bedgraph
         bedGraphToBigWig ~{output_prefix}_cpm.bedgraph ~{chromosome_sizes_file} ~{output_prefix}_cpm.bw
 
         #  RNA bigwig for unique reads
-        samtools view -h -q 30 bedtools ~{bam} | genomecov -ibam - -bg -scale $scale_factor > ~{output_prefix}_unique_cpm.bedgraph
+        samtools view -h -q 30 bedtools ~{bam} | genomecov -ibam - -bg -split -scale $scale_factor > ~{output_prefix}_unique_cpm.bedgraph
         bedGraphToBigWig ~{output_prefix}_unique_cpm.bedgraph ~{chromosome_sizes_file} ~{output_prefix}_unique_cpm.bw
     >>>
 
