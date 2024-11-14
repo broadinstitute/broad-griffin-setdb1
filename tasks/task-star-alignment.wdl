@@ -57,7 +57,7 @@ task star_align {
 
         if [[ '~{genes_gtf}' == *.gz ]]; then
             echo '------ Decompressing the GTF ------' 1>&2
-            gzip -dc ${genes_gtf} > genes.gtf
+            gzip -dc ~{genes_gtf} > genes.gtf
         else
             echo '------ No decompression needed for the GTF ------' 1>&2
             cat ~{genes_gtf} > genes.gtf
