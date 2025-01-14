@@ -18,7 +18,7 @@ workflow wf {
     }
 
   scatter(index in range(length(fastq1))) {
-      call align_quantify_repeats.wf as align_quantify_repeats {
+      call align_quantify_repeats.wf as wf_align_quantify_repeats {
             input: 
               fastq1=fastq1[index],
               #fastq2=fastq2[index],
@@ -30,20 +30,20 @@ workflow wf {
   }
 
   output{
-    Array[File] align_log=align_quantify_repeats.align_log
-    Array[File] bam_repeats_optimized=align_quantify_repeats.bam_repeats_optimized
-    Array[Int] rna_input_reads=align_quantify_repeats.rna_input_reads
-    Array[Int] rna_aligned_reads=align_quantify_repeats.rna_aligned_reads
-    Array[Int] rna_aligned_uniquely=align_quantify_repeats.rna_aligned_uniquely
-    Array[Int] rna_aligned_multimap=align_quantify_repeats.rna_aligned_multimap
-    Array[Int] rna_unaligned_reads=align_quantify_repeats.rna_unaligned_reads
-    Array[File] family_level_counts_uniq_mappers=align_quantify_repeats.family_level_counts_uniq_mappers
-  	Array[File] family_level_counts_multi_mappers=align_quantify_repeats.family_level_counts_multi_mappers
-    Array[File] loci_level_counts_uniq_mappers=align_quantify_repeats.loci_level_counts_uniq_mappers
-  	Array[File] loci_level_counts_multi_mappers=align_quantify_repeats.loci_level_counts_multi_mappers
-    Array[File] rna_fwd_strand_bw_track=align_quantify_repeats.rna_fwd_strand_bw_track
-    Array[File] rna_rev_strand_bw_track=align_quantify_repeats.rna_rev_strand_bw_track
-    Array[File] rna_bw_tracks=align_quantify_repeats.rna_bw_tracks
-    Array[File] rna_unique_bw_tracks=align_quantify_repeats.rna_unique_bw_tracks
+    Array[File] align_log=wf_align_quantify_repeats.align_log
+    Array[File] bam_repeats_optimized=wf_align_quantify_repeats.bam_repeats_optimized
+    Array[Int] rna_input_reads=wf_align_quantify_repeats.rna_input_reads
+    Array[Int] rna_aligned_reads=wf_align_quantify_repeats.rna_aligned_reads
+    Array[Int] rna_aligned_uniquely=wf_align_quantify_repeats.rna_aligned_uniquely
+    Array[Int] rna_aligned_multimap=wf_align_quantify_repeats.rna_aligned_multimap
+    Array[Int] rna_unaligned_reads=wf_align_quantify_repeats.rna_unaligned_reads
+    Array[File] family_level_counts_uniq_mappers=wf_align_quantify_repeats.family_level_counts_uniq_mappers
+  	Array[File] family_level_counts_multi_mappers=wf_align_quantify_repeats.family_level_counts_multi_mappers
+    Array[File] loci_level_counts_uniq_mappers=wf_align_quantify_repeats.loci_level_counts_uniq_mappers
+  	Array[File] loci_level_counts_multi_mappers=wf_align_quantify_repeats.loci_level_counts_multi_mappers
+    Array[File] rna_fwd_strand_bw_track=wf_align_quantify_repeats.rna_fwd_strand_bw_track
+    Array[File] rna_rev_strand_bw_track=wf_align_quantify_repeats.rna_rev_strand_bw_track
+    Array[File] rna_bw_tracks=wf_align_quantify_repeats.rna_bw_tracks
+    Array[File] rna_unique_bw_tracks=wf_align_quantify_repeats.rna_unique_bw_tracks
   }
 }

@@ -37,7 +37,7 @@ task star_align {
 
 
         Int cpus = 4
-        Int memory_gb = 40
+        Int memory_gb = 80
         Int disk_size_gb = 500
 
         String docker_image = "docker.io/polumechanos/star:2.10.b"
