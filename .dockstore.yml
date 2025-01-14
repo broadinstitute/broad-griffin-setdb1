@@ -24,3 +24,11 @@ workflows:
              - main
          tags:
              - /.*/
+   - name: "Align-quantify-repeats-scatter"
+     subclass: WDL
+     primaryDescriptorPath: /workflows/align-quantify-repeats-scatter.wdl
+     filters:  # Only develop or master branches and localAligner/** tags
+         branches:
+             - scatter-inputs
+         tags:
+             - /.*/
