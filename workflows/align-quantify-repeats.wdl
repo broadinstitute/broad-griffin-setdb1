@@ -7,17 +7,17 @@ import "../tasks/task-generate-rna-tracks.wdl" as generate_tracks
 
 workflow wf {
 	input{
-    File genome_index_tar
-    File chromosome_sizes_file
-    Array[File] fastq1
+    File? genome_index_tar
+    File? chromosome_sizes_file
+    Array[File]? fastq1
     Array[File]? fastq2
-    File te_gtf
-    File te_locIndex
-    File genes_gtf
-    Int sjdbOverhang
-    String twopassMode = "Basic"
-    String prefix
-    String stranded
+    File? te_gtf
+    File? te_locIndex
+    File? genes_gtf
+    Int? sjdbOverhang
+    String? twopassMode = "Basic"
+    String? prefix
+    String? stranded
     }
 
   call star.star_align as align {
