@@ -16,9 +16,10 @@ workflow wf {
     File genes_gtf
     Int sjdbOverhang
     String twopassMode = "Basic"
-    String prefix
     String stranded
     }
+    
+  String prefix = basename(fastq1[0], ".fastq.gz")
 
   call star.star_align as align {
     input: 
